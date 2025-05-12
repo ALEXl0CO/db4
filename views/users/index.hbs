@@ -1,0 +1,14 @@
+<h1>Users</h1>
+
+{{#if users.length}}
+	<div class="list-group">
+		{{#each users}}
+			<a href="/users/{{this.id}}" class="list-group-item list-group-item-action">
+			<h5>{{this.name}}</h5>
+			<p>{{this.email}}</p>
+			</a>
+		{{/each}}
+	</div>
+{{else}}
+	<p>No users found.</p>
+{{/if}}

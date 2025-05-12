@@ -1,0 +1,10 @@
+/* Custom styles beyond Bootstrap */
+body {
+ 	padding-bottom: 2rem;
+}
+
+.jumbotron {
+	padding: 2rem;
+	background-color: #f8f9fa;
+	border-radius: 0.3rem;
+}
