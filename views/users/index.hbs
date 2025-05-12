@@ -1,14 +1,78 @@
-<h1>Users</h1>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Users</h1>
+    <a href="/users/new" class="btn btn-primary">Create New User</a>
+  </div>
+  
+  {{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+  {{/if}}
+  
+  {{#if users.length}}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+              <td>{{this.id}}</td>
+              <td>{{this.name}}</td>
+              <td>{{this.email}}</td>
+              <td>{{#if this.isAdmin}}Yes{{else}}No{{/if}}</td>
+              <td>
+                <div class="btn-group">
+                  <a href="/users/{{this.id}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                  <button type="button" class="btn btn-sm btn-outline-danger" 
+                          onclick="confirmDelete({{this.id}}, '{{this.name}}')">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
+    <div class="alert alert-info">No users found.</div>
+  {{/if}}
+</div>
 
-{{#if users.length}}
-	<div class="list-group">
-		{{#each users}}
-			<a href="/users/{{this.id}}" class="list-group-item list-group-item-action">
-			<h5>{{this.name}}</h5>
-			<p>{{this.email}}</p>
-			</a>
-		{{/each}}
-	</div>
-{{else}}
-	<p>No users found.</p>
-{{/if}}
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete user <span id="userName"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form id="deleteForm" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function confirmDelete(id, name) {
+    document.getElementById('userName').textContent = name;
+    document.getElementById('deleteForm').action = `/users/${id}/delete`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+  }
+</script>
